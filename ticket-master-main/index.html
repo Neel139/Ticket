@@ -19,103 +19,34 @@
     <!-- QRCode library (minified). Place a local copy qrcode.min.js next to the HTML or use a CDN if allowed. -->
     <script src="qrcode.min.js"></script>
 
-    <!-- Vercel Web Analytics -->
-    <script>
-      window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-
     <style>
+      /* Minimal inline styles for popup so it shows even if your external CSS hasn't loaded.
+         You can move/replace these by editing style.css later. */
+      /* .qr { cursor: pointer; display:flex; justify-content:center; align-items:center; } */
       #popupModal {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        border-radius: 12px;
+        padding: 18px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
         display: none;
         z-index: 9999;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-        margin: 0;
+        max-width: 95vw;
+        max-height: 95vh;
+        overflow: hidden;
+        touch-action: none;
+        -webkit-overflow-scrolling: none;
       }
-
-      #popupModal.modal-open {
-        display: flex;
-      }
-
-      .popup-card {
-        background: #fff;
-        width: 85vw;
-        height: auto;
-        max-width: 400px;
-        border-radius: 20px;
-        padding: 4vh 1vh 1vh;
-        box-shadow: 0 5px 40px #00000090;
-        text-align: center;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        max-height: 90vh;
-        overflow-y: auto;
-      }
-
-      .popup-header {
-        width: 100%;
-        padding: 1.75vh 0 2vh 0;
-        color: white;
-        font-size: 1.75vh;
-        font-weight: 600;
-        text-align: center;
-        background-color: #1d86d7;
-        border-radius: 12px;
-        margin: -4vh -1vh 1vh -1vh;
-      }
-
-      .popup-ticket-info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .popup-dashed-line {
-        border-bottom: 1px dashed #00000050;
-        width: 70vw;
-        padding: 0.2vh;
-        margin: 10px 0;
-      }
-
-      .popup-number {
-        font-size: 5.5vh;
-        font-weight: 1000;
-        line-height: 1;
-        margin-bottom: 6px;
-      }
-
-      .popup-progress {
-        width: 100%;
-        margin-top: auto;
-        display: grid;
-        justify-content: space-around;
-        justify-items: center;
-      }
-
-      .close-btn-popup {
-        display: block;
-        margin-top: 12px;
-        text-align: center;
-        cursor: pointer;
-        color: #1d86d7;
-        font-weight: 600;
-      }
-
       body.modal-open {
         overflow: hidden;
         position: fixed;
         width: 100%;
         height: 100%;
       }
+      #popupModal .close-btn { display:block; margin-top:12px; text-align:center; cursor:pointer; color:#1d86d7; }
     </style>
 </head>
 
@@ -171,47 +102,8 @@
 
     <!-- Popup modal for larger QR -->
     <div id="popupModal" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="popup-card">
-            <div class="popup-header">Monthly Pass</div>
-            
-            <div id="popupQRCode" style="display:flex; justify-content:center; align-items:center; margin: 20px 0;"></div>
-            
-            <div class="popup-ticket-info">
-                <div class="popup-dashed-line"></div>
-                
-                <div class="interstate">INTERSTATE</div>
-                
-                <table style="width: 120%; position: relative; left: -10%; margin-top: 15px;">
-                    <tbody>
-                        <tr>
-                            <td style="width: 20%; text-align: center;">
-                                <div class="month" id="popup_pass_month_year">NOV 2025</div>
-                            </td>
-                            <td style="width: 60%; text-align: center;">
-                                <div class="zone">
-                                    <div class="popup-number" id="popup-zone-number">2</div>
-                                    <div class="text">ZONE RIDE</div>
-                                </div>
-                            </td>
-                            <td style="width: 20%; text-align: center;"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <div class="popup-progress">
-                <div class="progress-bar" style="margin-top: 20px; width: 130%;"></div>
-                <div class="expiry" style="margin-top: 15px;">Expires in <span id="popup-countdown">1</span> days.</div>
-            </div>
-            
-            <div class="color-strip" style="margin-top: 15px; margin-left: 0; margin-right: 0; width: 100%; padding-bottom: 2vh;">
-                <div class="color-block red"></div>
-                <div class="color-block green"></div>
-                <div class="color-block blue"></div>
-            </div>
-            
-            <div class="close-btn-popup" onclick="closePopup()">Tap to go back</div>
-        </div>
+      <div id="popupQRCode" style="display:flex; justify-content:center; align-items:center;"></div>
+      <div class="close-btn" onclick="closePopup()">Tap to go back</div>
     </div>
 
     <script>
@@ -254,8 +146,8 @@
           popupEl.innerHTML = "";
           new QRCode(popupEl, {
             text: qrText,
-            width: 350,
-            height: 350,
+            width: 480,
+            height: 480,
             colorDark: "#000000",
             colorLight: "#ffffff",
             correctLevel: QRCode.CorrectLevel.L,
@@ -263,20 +155,7 @@
         }
 
         function openPopup() {
-          // Sync popup with main page data
-          document.getElementById('popup_pass_month_year').textContent = document.getElementById('pass_month_year').textContent;
-          document.getElementById('popup-zone-number').textContent = document.querySelector('.number').textContent;
-          document.getElementById('popup-countdown').textContent = document.getElementById('countdown').textContent;
-          
-          // Sync progress bar
-          const mainProgressBar = document.querySelector('.progress-bar');
-          const popupProgressBar = document.querySelector('.popup-progress .progress-bar');
-          if (mainProgressBar && popupProgressBar) {
-            const progressWidth = mainProgressBar.style.getPropertyValue('--progress-width');
-            popupProgressBar.style.setProperty('--progress-width', progressWidth);
-          }
-          
-          document.getElementById('popupModal').style.display = 'flex';
+          document.getElementById('popupModal').style.display = 'block';
           document.getElementById('popupModal').setAttribute('aria-hidden', 'false');
           document.body.classList.add('modal-open');
           // regenerate to ensure it contains latest dynamic values (month/zone/expiry)
@@ -291,7 +170,7 @@
 
         // Also regenerate popup QR when clicking the popup area (optional)
         document.getElementById('popupModal').addEventListener('click', function (e) {
-          // if user clicks outside the card, close popup
+          // if user clicks outside the QR, close popup (but not when clicking the QR itself)
           if (e.target.id === 'popupModal') closePopup();
         });
         
@@ -303,7 +182,6 @@
         document.getElementById('popupModal').addEventListener('wheel', function (e) {
           e.preventDefault();
         }, { passive: false });
-        
         // -------------------------
         // Month/Year, countdown & zone logic
         // -------------------------
