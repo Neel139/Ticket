@@ -239,14 +239,15 @@
         }
 
         function updateZoneText() {
-            const zoneElement = document.querySelector('.number');
-            let currentZone = parseInt(zoneElement.textContent, 10);
-            if (Number.isNaN(currentZone)) currentZone = 2;
-            currentZone = currentZone === 9 ? 2 : currentZone + 1;
-            zoneElement.textContent = currentZone;
-            // regenerate QR so it reflects the new zone immediately
-            generateQRCode();
-        }
+    const zoneElement = document.querySelector('.number');
+    let currentZone = parseInt(zoneElement.textContent, 10);
+    if (Number.isNaN(currentZone)) currentZone = 2;
+    currentZone = currentZone === 9 ? 2 : currentZone + 1;
+    zoneElement.textContent = currentZone;
+
+    // ✅ updates QR when zone changes
+    generateQRCode();
+}
 
         function updateCountdown() {
     const countdown = document.getElementById('countdown');
