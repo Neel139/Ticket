@@ -1,0 +1,18 @@
+function updateCountdown() {
+    const eventDate = new Date('2026-04-01T00:00:00Z');
+    const now = new Date();
+    const totalSeconds = Math.floor((eventDate - now) / 1000);
+    const days = Math.floor(totalSeconds / (3600 * 24));
+    const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+
+    let countdownMessage;
+    if (days > 0) {
+        countdownMessage = `${days} days remaining`;
+    } else if (days === 0 && hours > 0) {
+        countdownMessage = `${hours} hours remaining`;
+    } else {
+        countdownMessage = 'Event has started';
+    }
+
+    document.getElementById('countdown').innerText = countdownMessage;
+}
