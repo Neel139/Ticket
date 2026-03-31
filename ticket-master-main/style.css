@@ -135,7 +135,7 @@ body {
 }
 
 .progress-bar {
-    width: 100%;        /* FIX */
+    width: 130%;        /* FIX */
     height: 6px;        /* FIX (was 8px) */
     background: #eee;
     border-radius: 4px;
@@ -169,9 +169,9 @@ body {
 .color-strip {
     display: flex;
     justify-content: space-between;
-    width: 100%;        /* FIX */
+    width: 130%;        /* FIX */
     margin: 0;          /* FIX remove side push */
-    padding-bottom: 1vh; /* optional tighter spacing */
+    padding-bottom: 2vh; /* optional tighter spacing */
     animation: blinker 1s linear infinite;
 }
 @keyframes blinker {
