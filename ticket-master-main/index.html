@@ -262,7 +262,17 @@
             const daysPassed = currentDate.getDate();
             const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
 
-            countdown.textContent = `${remainingDays}`;
+                if (remainingDays === 0) {
+                    countdown.textContent = `${remainingHours}h`;
+                }
+                else {
+                    countdown.textContent = `${remainingDays}`;
+                 }
+
+                const progressBar = document.querySelector('.progress-bar');
+                if (progressBar) {
+                    progressBar.style.setProperty('--progress-width', `${progressPercentage}%`);
+                    }
 
             // if your CSS progress-bar uses a CSS variable --progress-width (like in your original),
             // update that variable. If not, adjust this line accordingly.
