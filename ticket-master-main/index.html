@@ -249,30 +249,44 @@
         }
 
         function updateCountdown() {
-            const countdown = document.getElementById('countdown');
-            const currentDate = new Date();
-            const currentMonth = currentDate.getMonth();
-            const deadlineDate = new Date(currentDate.getFullYear(), currentMonth + 1, 1, 0, 0, 0);
+    const countdown = document.getElementById('countdown');
+    const currentDate = new Date();
 
-            const timeRemaining = deadlineDate - currentDate;
+    const deadlineDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        1,
+        0, 0, 0
+    );
 
-            const remainingDays = Math.max(0, Math.floor(timeRemaining / (1000 * 60 * 60 * 24)));
+    const timeRemaining = deadlineDate - currentDate;
 
-            const totalDaysInMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
-            const daysPassed = currentDate.getDate();
-            const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
+    const remainingDays = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const remainingHours = Math.floor(
+        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
 
-                if (remainingDays === 0) {
-                    countdown.textContent = `${remainingHours}h`;
-                }
-                else {
-                    countdown.textContent = `${remainingDays}`;
-                 }
+    const totalDaysInMonth = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 1,
+        0
+    ).getDate();
 
-                const progressBar = document.querySelector('.progress-bar');
-                if (progressBar) {
-                    progressBar.style.setProperty('--progress-width', `${progressPercentage}%`);
-                    }
+    const daysPassed = currentDate.getDate();
+    const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
+
+    // ✅ FIXED LOGIC
+    if (remainingDays <= 0) {
+        countdown.textContent = `${remainingHours}h`;
+    } else {
+        countdown.textContent = `${remainingDays}`;
+    }
+
+    const progressBar = document.querySelector('.progress-bar');
+    if (progressBar) {
+        progressBar.style.setProperty('--progress-width', `${progressPercentage}%`);
+    }
+}
 
             // if your CSS progress-bar uses a CSS variable --progress-width (like in your original),
             // update that variable. If not, adjust this line accordingly.
