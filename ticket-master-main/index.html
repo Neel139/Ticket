@@ -113,13 +113,13 @@
    CONFIG
 ========================= */
 
-// 👉 Add approved tokens here manually
+// 👉 Add approved tokens here
 let allowedTokens = [
-  "5dd8c685-4c09-4872-b2b9-8fb74c097a6dPUT-APPROVED-TOKEN-HERE"
+  "PUT-APPROVED-TOKEN-HERE"
 ];
 
-// 👉 Admin secret (open with ?admin=key)
-const ADMIN_SECRET = "admin123";
+// 👉 Change this to your secret admin key
+const ADMIN_SECRET = "k9xP2!zQ7@admin";
 
 
 /* =========================
@@ -132,19 +132,42 @@ function generateToken() {
 
 
 /* =========================
-   GET / CREATE TOKEN
+   COOKIE HELPERS
 ========================= */
 
-let userToken = localStorage.getItem("userToken");
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find(row => row.startsWith(name + "="))
+    ?.split("=")[1];
+}
 
-if (!userToken) {
-  userToken = generateToken();
-  localStorage.setItem("userToken", userToken);
+function setCookie(name, value) {
+  document.cookie = name + "=" + value + "; path=/; max-age=31536000";
 }
 
 
 /* =========================
-   ACCESS CONTROL
+   GET / CREATE STABLE TOKEN
+========================= */
+
+let userToken =
+  localStorage.getItem("userToken") ||
+  getCookie("userToken");
+
+if (!userToken) {
+  userToken = generateToken();
+}
+
+// Save in both places (extra safety)
+localStorage.setItem("userToken", userToken);
+setCookie("userToken", userToken);
+
+console.log("User Token:", userToken);
+
+
+/* =========================
+   ACCESS CHECK
 ========================= */
 
 function hasAccess() {
@@ -153,29 +176,28 @@ function hasAccess() {
 
 
 /* =========================
-   BLOCK PAGE IF NOT ALLOWED
+   ENFORCE ACCESS
 ========================= */
 
 function enforceAccess() {
   if (!hasAccess()) {
     alert("❌ Access Denied\n\nYour key:\n" + userToken);
 
-    // 👉 Hide your entire page
     document.documentElement.innerHTML = `
-      <h2 style="text-align:center;margin-top:50px;">
-        Access Denied ❌<br><br>
-        Your Key:<br>
-        <code>${userToken}</code><br><br>
-        Send this to admin
-      </h2>
+      <div style="text-align:center;margin-top:100px;font-family:sans-serif;">
+        <h2>Access Denied ❌</h2>
+        <p>Your Key:</p>
+        <code style="font-size:16px;">${userToken}</code>
+        <p>Send this key to admin</p>
+      </div>
     `;
   }
 }
 
 
 /* =========================
-   ADMIN MODE (optional)
-   URL: ?admin=admin123
+   ADMIN MODE
+   URL: ?admin=your-secret
 ========================= */
 
 function checkAdmin() {
@@ -188,9 +210,13 @@ function checkAdmin() {
 }
 
 
+/* =========================
+   ADMIN PANEL UI
+========================= */
+
 function openAdminPanel() {
   document.body.innerHTML = `
-    <h1>Admin Panel</h1>
+    <h1>🔐 Admin Panel</h1>
 
     <p><b>Your Token:</b></p>
     <code>${userToken}</code>
@@ -224,6 +250,7 @@ function renderList() {
 
 function addToken() {
   const val = document.getElementById("newToken").value.trim();
+
   if (val && !allowedTokens.includes(val)) {
     allowedTokens.push(val);
     renderList();
@@ -243,6 +270,8 @@ function removeToken(i) {
 
 checkAdmin();
 enforceAccess();
+
+
 
 
       
