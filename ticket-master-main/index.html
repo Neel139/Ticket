@@ -109,6 +109,142 @@
     </div>
 
     <script>
+        /* =========================
+   CONFIG
+========================= */
+
+// 👉 Add approved tokens here manually
+let allowedTokens = [
+  "PUT-APPROVED-TOKEN-HERE"
+];
+
+// 👉 Admin secret (open with ?admin=key)
+const ADMIN_SECRET = "admin123";
+
+
+/* =========================
+   TOKEN GENERATION
+========================= */
+
+function generateToken() {
+  return crypto.randomUUID();
+}
+
+
+/* =========================
+   GET / CREATE TOKEN
+========================= */
+
+let userToken = localStorage.getItem("userToken");
+
+if (!userToken) {
+  userToken = generateToken();
+  localStorage.setItem("userToken", userToken);
+}
+
+
+/* =========================
+   ACCESS CONTROL
+========================= */
+
+function hasAccess() {
+  return allowedTokens.includes(userToken);
+}
+
+
+/* =========================
+   BLOCK PAGE IF NOT ALLOWED
+========================= */
+
+function enforceAccess() {
+  if (!hasAccess()) {
+    alert("❌ Access Denied\n\nYour key:\n" + userToken);
+
+    // 👉 Hide your entire page
+    document.documentElement.innerHTML = `
+      <h2 style="text-align:center;margin-top:50px;">
+        Access Denied ❌<br><br>
+        Your Key:<br>
+        <code>${userToken}</code><br><br>
+        Send this to admin
+      </h2>
+    `;
+  }
+}
+
+
+/* =========================
+   ADMIN MODE (optional)
+   URL: ?admin=admin123
+========================= */
+
+function checkAdmin() {
+  const params = new URLSearchParams(window.location.search);
+  const key = params.get("admin");
+
+  if (key === ADMIN_SECRET) {
+    openAdminPanel();
+  }
+}
+
+
+function openAdminPanel() {
+  document.body.innerHTML = `
+    <h1>Admin Panel</h1>
+
+    <p><b>Your Token:</b></p>
+    <code>${userToken}</code>
+
+    <h3>Add Token</h3>
+    <input id="newToken" placeholder="Paste user token" />
+    <button onclick="addToken()">Add</button>
+
+    <h3>Allowed Tokens</h3>
+    <ul id="list"></ul>
+  `;
+
+  renderList();
+}
+
+
+function renderList() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+
+  allowedTokens.forEach((t, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      ${t}
+      <button onclick="removeToken(${i})">❌</button>
+    `;
+    list.appendChild(li);
+  });
+}
+
+
+function addToken() {
+  const val = document.getElementById("newToken").value.trim();
+  if (val && !allowedTokens.includes(val)) {
+    allowedTokens.push(val);
+    renderList();
+  }
+}
+
+
+function removeToken(i) {
+  allowedTokens.splice(i, 1);
+  renderList();
+}
+
+
+/* =========================
+   INIT
+========================= */
+
+checkAdmin();
+enforceAccess();
+
+
       
  // function getDeviceId() {
  //            return btoa(
