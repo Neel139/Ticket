@@ -110,48 +110,48 @@
 
     <script>
       
-        // function getDeviceId() {
-        //     return btoa(
-        //     navigator.userAgent +
-        //     screen.width +
-        //     screen.height +
-        //     screen.colorDepth +
-        //     navigator.platform +
-        //     Intl.DateTimeFormat().resolvedOptions().timeZone +
-        //     navigator.language
-        // );
-        // }
+        function getDeviceId() {
+            return btoa(
+            navigator.userAgent +
+            screen.width +
+            screen.height +
+            screen.colorDepth +
+            navigator.platform +
+            Intl.DateTimeFormat().resolvedOptions().timeZone +
+            navigator.language
+        );
+        }
 
-        // function getOrCreateUserId() {
-        //             let userId = localStorage.getItem("userId");
-        //             if (!userId) {
-        //     userId = getDeviceId();
-        //     localStorage.setItem("userId", userId);
-        // }
-        //             return userId;
-        // }
+        function getOrCreateUserId() {
+                    let userId = localStorage.getItem("userId");
+                    if (!userId) {
+            userId = getDeviceId();
+            localStorage.setItem("userId", userId);
+        }
+                    return userId;
+        }
 
         // const currentUserId = getOrCreateUserId();
-        // console.log("Device ID:", currentUserId);
-        // alert(currentUserId);
+        console.log("Device ID:", currentUserId);
+        alert(currentUserId);
 
-        // const allowedDevices = [
-        // "TW96aWxsYS81LjAgKGlQaG9uZTsgQ1BVIGlQaG9uZSBPUyAxOF83IGxpa2UgTWFjIE9TIFgpIEFwcGxlV2ViS2l0LzYwNS4xLjE1IChLSFRNTCwgbGlrZSBHZWNrbykgVmVyc2lvbi8yNi4zIE1vYmlsZS8xNUUxNDggU2FmYXJpLzYwNC4xNDQwOTU2MjRpUGhvbmVBbWVyaWNhL05ld19Zb3JrZW4tVVM=",
-        // "ТW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjlE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbG|rZSBHZWNrbykgQ2hyb21ILzEONi4wLjAuMCBTYWZhcmkvNTM3LjM2MTY4MDEwNТAzМЕ1hY0ludGVsQW1lcmljYS90ZХdfWW9ya2VuLUdC"
-        // "TW96aWxsYS81LjAgKGlQaG9uZTsgQ1BVIGlQaG9uZSBPUyAxOF83IGxpa2UgTWFjIE9TIFgpIEFwcGxlV2ViS2l0LzYwNS4xLjE1IChLSFRNTCwgbGlrZSBHZWNrbykgVmVyc2lvbi8yNi4zIE1vYmlsZS8xNUUxNDggU2FmYXJpLzYwNC4xNDAyODc0MjRpUGhvbmVBbWVyaWNhL05ld19Zb3JrZW4tSU4="
-        // ];
+        const allowedDevices = [
+        "TW96aWxsYS81LjAgKGlQaG9uZTsgQ1BVIGlQaG9uZSBPUyAxOF83IGxpa2UgTWFjIE9TIFgpIEFwcGxlV2ViS2l0LzYwNS4xLjE1IChLSFRNTCwgbGlrZSBHZWNrbykgVmVyc2lvbi8yNi4zIE1vYmlsZS8xNUUxNDggU2FmYXJpLzYwNC4xNDQwOTU2MjRpUGhvbmVBbWVyaWNhL05ld19Zb3JrZW4tVVM=",
+        "ТW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjlE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbG|rZSBHZWNrbykgQ2hyb21ILzEONi4wLjAuMCBTYWZhcmkvNTM3LjM2MTY4MDEwNТAzМЕ1hY0ludGVsQW1lcmljYS90ZХdfWW9ya2VuLUdC"
+        "TW96aWxsYS81LjAgKGlQaG9uZTsgQ1BVIGlQaG9uZSBPUyAxOF83IGxpa2UgTWFjIE9TIFgpIEFwcGxlV2ViS2l0LzYwNS4xLjE1IChLSFRNTCwgbGlrZSBHZWNrbykgVmVyc2lvbi8yNi4zIE1vYmlsZS8xNUUxNDggU2FmYXJpLzYwNC4xNDAyODc0MjRpUGhvbmVBbWVyaWNhL05ld19Zb3JrZW4tSU4="
+        ];
 
-        // if (!allowedDevices.includes(currentUserId)) {
-        // document.body.innerHTML = `
-        //     <h2 style="text-align:center; margin-top:50px;">
-        //     Access Denied ❌
-        //     </h2>
-        //     <p style="text-align:center;">
-        //     This device is not authorized.
-        //     </p>
-        // `;
-        // throw new Error("Unauthorized device");
-        // }
+        if (!allowedDevices.includes(currentUserId)) {
+        document.body.innerHTML = `
+            <h2 style="text-align:center; margin-top:50px;">
+            Access Denied ❌
+            </h2>
+            <p style="text-align:center;">
+            This device is not authorized.
+            </p>
+        `;
+        throw new Error("Unauthorized device");
+        }
 
 
         // -------------------------
