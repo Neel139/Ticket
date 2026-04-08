@@ -133,6 +133,25 @@
         const currentUserId = getOrCreateUserId();
         console.log("Device ID:", currentUserId);
 
+        document.body.insertAdjacentHTML("afterbegin", `
+        <div style="
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        background: white;
+        color: black;
+        padding: 10px;
+        font-size: 12px;
+        z-index: 99999;
+        word-break: break-all;
+        border: 2px solid red;
+        border-radius: 8px;
+        ">
+        <b>Device ID:</b><br>${currentUserId}
+      </div>
+        `);
+
         const allowedDevices = [
             "TW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjIE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzE0Ni4wLjAuMCBTYWZhcmkvNTM3LjM2MTY4MDEwNTAzME1hY0ludGVsQW1lcmljYS9OZXdfWW9ya2VuLUdC",
             "TW96aWxsYS81LjAgKGlQaG9uZTsgQ1BVIGlQaG9uZSBPUyAxOF83IGxpa2UgTWFjIE9TIFgpIEFwcGxlV2ViS2l0LzYwNS4xLjE1IChLSFRNTCwgbGlrZSBHZWNrbykgVmVyc2lvbi8yNi4zIE1vYmlsZS8xNUUxNDggU2FmYXJpLzYwNC4xNDQwOTU2MjRpUGhvbmVBbWVyaWNhL05ld19Zb3JrZW4tVVM="
