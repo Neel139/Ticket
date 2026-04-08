@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html> 
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -20,38 +20,41 @@
     <script src="qrcode.min.js"></script>
 
     <style>
-      /* Minimal inline styles for popup so it shows even if your external CSS hasn't loaded.
+        /* Minimal inline styles for popup so it shows even if your external CSS hasn't loaded.
          You can move/replace these by editing style.css later. */
-      /* .qr { cursor: pointer; display:flex; justify-content:center; align-items:center; } */
-      #popupModal {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #fff;
-        border-radius: 12px;
-        padding: 18px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.4);
-        display: none;
-        z-index: 9999;
-        max-width: 95vw;
-        max-height: 95vh;
-        overflow: hidden;
-        touch-action: none;
-        -webkit-overflow-scrolling: none;
-      }
-      body.modal-open {
-        overflow: hidden;
-        position: fixed;
-        width: 100%;
-        height: 100%;
-      }
-      #popupModal .close-btn { 
-          display:block; 
-          margin-top:12px; 
-          text-align:center; 
-          cursor:pointer; 
-          color:#1d86d7; }
+        /* .qr { cursor: pointer; display:flex; justify-content:center; align-items:center; } */
+        #popupModal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            display: none;
+            z-index: 9999;
+            max-width: 95vw;
+            max-height: 95vh;
+            overflow: hidden;
+            touch-action: none;
+            -webkit-overflow-scrolling: none;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        #popupModal .close-btn {
+            display: block;
+            margin-top: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: #1d86d7;
+        }
     </style>
 </head>
 
@@ -65,10 +68,10 @@
                     <div id="qrcode" aria-label="QR code"></div>
                 </div>
                 <div class="tap">Tap to enlarge</div>
-                <div style="border-bottom: 1px dashed #00000050;width: 70vw;padding: 0.2vh;"></div>
+                <div style="border-bottom: 2px dashed #00000050;width: 70vw;padding: 0.2vh;"></div>
                 <div class="info">
                     <div class="interstate">INTERSTATE</div>
-                    <table style="width: 120%;position: relative;left: -10%;">
+                    <table style="width: 113%;position: relative;left: -7%;">
                         <tbody>
                             <tr>
                                 <td style="width: 20%; text-align: center; align-content: flex-start;">
@@ -99,9 +102,7 @@
                     <div class="color-block blue"></div>
                 </div>
                 <div class="progress-bar"></div>
-                <div class="expiry">
-    Expires in <span id="countdown">1</span> <span id="timeUnit">days</span>.
-</div>
+                <div class="expiry">Expires in <span id="countdown">1</span> days.</div>
                 <div class="validator">View Onboard Validator Instructions</div>
             </div>
         </div>
@@ -109,129 +110,85 @@
 
     <!-- Popup modal for larger QR -->
     <div id="popupModal" role="dialog" aria-modal="true" aria-hidden="true">
-      <div id="popupQRCode" style="display:flex; justify-content:center; align-items:center;"></div>
-      <div class="close-btn" onclick="closePopup()">Tap to go back</div>
+        <div id="popupQRCode" style="display:flex; justify-content:center; align-items:center;"></div>
+        <div class="close-btn" onclick="closePopup()">Tap to go back</div>
     </div>
 
     <script>
-     function getDeviceId() {
-                return btoa(
-                navigator.userAgent +
-                screen.width +
-                screen.height +
-                screen.colorDepth +
-                navigator.platform +
-                Intl.DateTimeFormat().resolvedOptions().timeZone +
-                navigator.language
-            );
-            }
-    
-            function getOrCreateUserId() {
-                        let userId = localStorage.getItem("userId");
-                        if (!userId) {
-                userId = getDeviceId();
-                localStorage.setItem("userId", userId);
-            }
-                        return userId;
-            }
-    
-            const currentUserId = getOrCreateUserId();
-            console.log("Device ID:", currentUserId);
-            alert(currentUserId);
-    
-            const allowedDevices = [
-            "TW96aWxsYS81LjAgKGlQaG9uZTsgQ1BVIGlQaG9uZSBPUyAxOF83IGxpa2UgTWFjIE9TIFgpIEFwcGxlV2ViS2l0LzYwNS4xLjE1IChLSFRNTCwgbGlrZSBHZWNrbykgVmVyc2lvbi8yNi4zIE1vYmlsZS8xNUUxNDggU2FmYXJpLzYwNC4xNDQwOTU2MjRpUGhvbmVBbWVyaWNhL05ld19Zb3JrZW4tVVM=",
-            "ТW96aWxsYS81LjAgKE1hY2ludG9zaDsgSW50ZWwgTWFjlE9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbG|rZSBHZWNrbykgQ2hyb21ILzEONi4wLjAuMCBTYWZhcmkvNTM3LjM2MTY4MDEwNТAzМЕ1hY0ludGVsQW1lcmljYS90ZХdfWW9ya2VuLUdC"
-            "ТW96aWхsYS81LjAgKЕ1hY2ludG9zaDsgSW50ZWwgTWFj|E9TIFggMTBfMTVfNykgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbG|rZSBHZWNrbykgQ2hyb21ILzEONi4wLjAuMCBTYWZhcmkvNTM3LjM2MTY4MDEwNТAzМЕ1hY0ludGVsQW1lcmIjYS90ZХdfWW9ya2VuLUdC"
-            ];
-    
-            if (!allowedDevices.includes(currentUserId)) {
-            document.body.innerHTML = `
-                <h2 style="text-align:center; margin-top:50px;">
-                Access Denied ❌
-                </h2>
-                <p style="text-align:center;">
-                This device is not authorized.
-                </p>
-            `;
-            throw new Error("Unauthorized device");
-            }
-
-
         // -------------------------
         // QR generation & popup
         // -------------------------
         // Example QR text generator - you can replace this with any dynamic string (token, URL, JSON, etc.)
         function buildQrText() {
-          // You can include dynamic elements: current timestamp, zone number, expiry, device id, etc.
-          const zone = document.querySelector('.number') ? document.querySelector('.number').textContent.trim() : '2';
-          const now = new Date().toISOString();
-          // Example: JSON string encoded into QR (you can switch to a URL or any other text)
-          const payload = {
-            type: "monthly_pass",
-            provider: "NJ Transit",
-            month: document.getElementById('pass_month_year').textContent,
-            zone: zone,
-            issued_at: now,
-          };
-          return JSON.stringify(payload);
+            // You can include dynamic elements: current timestamp, zone number, expiry, device id, etc.
+            const zone = document.querySelector('.number') ? document.querySelector('.number').textContent.trim() : '2';
+            const now = new Date().toISOString();
+            // Example: JSON string encoded into QR (you can switch to a URL or any other text)
+            const payload = {
+                type: "monthly_pass",
+                provider: "NJ Transit",
+                month: document.getElementById('pass_month_year').textContent,
+                zone: zone,
+                issued_at: now,
+            };
+            return JSON.stringify(payload);
         }
 
         function generateQRCode() {
-          const qrText = buildQrText();
+            const qrText = buildQrText();
 
-          // small QR in card
-          const smallEl = document.getElementById("qrcode");
-          smallEl.innerHTML = ""; // clear previous
-          new QRCode(smallEl, {
-            text: qrText,
-            width: 220,
-            height: 220,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.L,
-          });
+            // small QR in card
+            const smallEl = document.getElementById("qrcode");
+            smallEl.innerHTML = ""; // clear previous
+            new QRCode(smallEl, {
+                text: qrText,
+                width: 220,
+                height: 220,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L,
+            });
 
-          // large QR for popup
-          const popupEl = document.getElementById("popupQRCode");
-          popupEl.innerHTML = "";
-          new QRCode(popupEl, {
-            text: qrText,
-            width: 480,
-            height: 480,
-            colorDark: "#000000",
-            colorLight: "#ffffff",
-            correctLevel: QRCode.CorrectLevel.L,
-          });
+            // large QR for popup
+            const popupEl = document.getElementById("popupQRCode");
+            popupEl.innerHTML = "";
+            new QRCode(popupEl, {
+                text: qrText,
+                width: 480,
+                height: 480,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L,
+            });
         }
 
         function openPopup() {
-          document.getElementById('popupModal').style.display = 'block';
-          document.getElementById('popupModal').setAttribute('aria-hidden', 'false');
-          document.body.classList.add('modal-open');
-          // regenerate to ensure it contains latest dynamic values (month/zone/expiry)
-          generateQRCode();
+            document.getElementById('popupModal').style.display = 'block';
+            document.getElementById('popupModal').setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            // regenerate to ensure it contains latest dynamic values (month/zone/expiry)
+            generateQRCode();
         }
 
         function closePopup() {
-          document.getElementById('popupModal').style.display = 'none';
-          document.getElementById('popupModal').setAttribute('aria-hidden', 'true');
-          document.body.classList.remove('modal-open');
+            document.getElementById('popupModal').style.display = 'none';
+            document.getElementById('popupModal').setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
         }
 
         // Also regenerate popup QR when clicking the popup area (optional)
         document.getElementById('popupModal').addEventListener('click', function (e) {
-          // if user clicks outside the QR, close popup (but not when clicking the QR itself)
-          if (e.target.id === 'popupModal') closePopup();
+            // if user clicks outside the QR, close popup (but not when clicking the QR itself)
+            if (e.target.id === 'popupModal') closePopup();
         });
-        
+
         // Prevent scrolling on mobile when modal is open
         document.getElementById('popupModal').addEventListener('touchmove', function (e) {
-          e.preventDefault();
+            e.preventDefault();
         }, { passive: false });
-        
+
         document.getElementById('popupModal').addEventListener('wheel', function (e) {
-          e.preventDefault();
+            e.preventDefault();
         }, { passive: false });
         // -------------------------
         // Month/Year, countdown & zone logic
@@ -246,87 +203,55 @@
         }
 
         function updateZoneText() {
-    const zoneElement = document.querySelector('.number');
-    let currentZone = parseInt(zoneElement.textContent, 10);
-    if (Number.isNaN(currentZone)) currentZone = 2;
-    currentZone = currentZone === 19 ? 2 : currentZone + 1;
-    zoneElement.textContent = currentZone;
-
-    // ✅ updates QR when zone changes
-    generateQRCode();
-}
+            const zoneElement = document.querySelector('.number');
+            let currentZone = parseInt(zoneElement.textContent, 10);
+            if (Number.isNaN(currentZone)) currentZone = 2;
+            currentZone = currentZone === 9 ? 2 : currentZone + 1;
+            zoneElement.textContent = currentZone;
+            // regenerate QR so it reflects the new zone immediately
+            generateQRCode();
+        }
 
         function updateCountdown() {
-    const countdown = document.getElementById('countdown');
-    const unit = document.getElementById('timeUnit');
+            const countdown = document.getElementById('countdown');
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const deadlineDate = new Date(currentDate.getFullYear(), currentMonth + 1, 1, 0, 0, 0);
 
-    const currentDate = new Date();
+            const timeRemaining = deadlineDate - currentDate;
 
-    const deadlineDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        1,
-        0, 0, 0
-    );
+            const remainingDays = Math.max(0, Math.floor(timeRemaining / (1000 * 60 * 60 * 24)));
 
-    const timeRemaining = deadlineDate - currentDate;
+            const totalDaysInMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
+            const daysPassed = currentDate.getDate();
+            const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
 
-    const remainingDays = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            countdown.textContent = `${remainingDays}`;
 
-    const remainingHours = Math.floor(
-        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    );
-
-    const remainingMinutes = Math.floor(
-        (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
-    );
-
-    const remainingSeconds = Math.floor(
-        (timeRemaining % (1000 * 60)) / 1000
-    );
-
-    const totalDaysInMonth = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth() + 1,
-        0
-    ).getDate();
-
-    const daysPassed = currentDate.getDate();
-    const progressPercentage = (daysPassed / totalDaysInMonth) * 100;
-
-    // ✅ FINAL DISPLAY LOGIC
-    if (remainingDays <= 0) {
-        countdown.textContent = `${remainingHours}h ${remainingMinutes}m ${remainingSeconds}s`;
-        unit.textContent = ""; // remove "days"
-    } else {
-        countdown.textContent = remainingDays;
-        unit.textContent = remainingDays === 1 ? "day" : "days";
-    }
-
-    const progressBar = document.querySelector('.progress-bar');
-    if (progressBar) {
-        progressBar.style.setProperty('--progress-width', `${progressPercentage}%`);
-    }
-}
-
-           
+            // if your CSS progress-bar uses a CSS variable --progress-width (like in your original),
+            // update that variable. If not, adjust this line accordingly.
+            const progressBar = document.querySelector('.progress-bar');
+            if (progressBar) {
+                progressBar.style.setProperty('--progress-width', `${progressPercentage}%`);
+            }
+        }
 
         // -------------------------
         // Initialization
         // -------------------------
         function initAll() {
-          updateMonthAndYear();
-          updateCountdown();
-          generateQRCode();
-          // Keep countdown updated every second (so the days value moves down at midnight)
-          setInterval(updateCountdown, 1000);
+            updateMonthAndYear();
+            updateCountdown();
+            generateQRCode();
+            // Keep countdown updated every second (so the days value moves down at midnight)
+            setInterval(updateCountdown, 1000);
         }
 
         // Run when DOM ready
         if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', initAll);
+            document.addEventListener('DOMContentLoaded', initAll);
         } else {
-          initAll();
+            initAll();
         }
     </script>
 
