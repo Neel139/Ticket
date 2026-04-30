@@ -127,7 +127,7 @@ body {
 
 /* Progress section pinned to bottom */
 .progress {
-    width: 120%;
+    width: 100%;
     margin-top: auto;
     display: grid;
     justify-content: space-around;
@@ -135,7 +135,7 @@ body {
 }
 
 .progress-bar {
-    width: 100%;
+    width: 120%;
     height: 8px;
     background: #eee;
     border-radius: 4px;
@@ -169,7 +169,7 @@ body {
 .color-strip {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 120%;
     margin-left: 30px;
     margin-right: 30px;
     padding-bottom: 2vh;
