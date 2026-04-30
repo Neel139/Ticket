@@ -298,7 +298,7 @@
 
     // ✅ FINAL DISPLAY LOGIC
     if (remainingDays <= 0) {
-        countdown.textContent = `${remainingHours}h ${remainingMinutes}m ${remainingSeconds}s`;
+        countdown.textContent = `${remainingHours}:${remainingMinutes}:${remainingSeconds}`;
         unit.textContent = ""; // remove "days"
     } else {
         countdown.textContent = remainingDays;
